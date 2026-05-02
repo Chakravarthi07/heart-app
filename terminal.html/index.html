@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+chakru
+<head>
+    <meta charset="UTF-8">
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        input[type="file"] {
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        canvas {
+            max-width: 500px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Heart Disease Prediction</h1>
+
+    <div class="container">
+        <label for="fileInput">Upload CSV File:</label>
+        <input type="file" id="fileInput" accept=".csv">
+        <button onclick="uploadFile()">Predict</button>
+
+        <div id="result">Prediction results will be displayed here.</div>
+
+        <div class="chart-container">
+            <canvas id="accuracyChart"></canvas>
+            <canvas id="actualPieChart"></canvas>
+            <canvas id="predictedPieChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a CSV file.");
+                return;
+            }
+
+            // Simulated response with the provided values
+            const data = {
+                prediction: "Heart Disease",
+                accuracy: 0.92,
+                loss: 0.15,
+                actual_no_disease: 50,
+                actual_heart_disease: 50,
+                predicted_no_disease: 48,
+                predicted_heart_disease: 52
+            };
+
+            document.getElementById("result").textContent = "Prediction: " + data.prediction;
+
+            // Render Accuracy/Loss Chart
+            renderChart("accuracyChart", "Model Accuracy/Loss", ["Accuracy", "Loss"], [data.accuracy, data.loss]);
+
+            // Render Actual Pie Chart
+            renderPieChart("actualPieChart", "Actual Class Distribution", ["No Heart Disease", "Heart Disease"], [data.actual_no_disease, data.actual_heart_disease]);
+
+            // Render Predicted Pie Chart
+            renderPieChart("predictedPieChart", "Predicted Class Distribution", ["No Heart Disease", "Heart Disease"], [data.predicted_no_disease, data.predicted_heart_disease]);
+        }
+
+        function renderChart(elementId, label, labels, values) {
+            const ctx = document.getElementById(elementId).getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: values,
+                        backgroundColor: ["#2ecc71", "#e74c3c"],
+                    }]
+                }
+            });
+        }
+
+        function renderPieChart(elementId, title, labels, values) {
+            const ctx = document.getElementById(elementId).getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: ["#3498db", "#9b59b6"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
+
